@@ -25,21 +25,24 @@ function square=oddMagicSquare(n)
     end
 end
 
-function square=evenMultipleMagicSquare(n)
-    square=[1:n^2];
+function result=evenMultipleMagicSquare(n)
+    square=1:n^2;
     square=reshape(square,n,n)';
+    result=square;   
     for i=1:n/4
-        subMatrix=square((1+4*(i-1)):(4*i),(1+4*(i-1)):(4*i));
-        for j=1:4
-            [c,r]=find(square==n^2+1-subMatrix(j,j));
-            square(c,r)=subMatrix(j,j);
-            subMatrix(j,j)=n^2+1-subMatrix(j,j);
-            [c,r]=find(square==n^2+1-subMatrix(j,5-j));
-            square(c,r)=subMatrix(j,5-j);
-            subMatrix(j,5-j)=n^2+1-subMatrix(j,5-j);
-        end            
-        square((1+4*(i-1)):(4*i),(1+4*(i-1)):(4*i))=subMatrix;
+        for j=1:n/4
+            subMatrix=generateSubMatrix(square,i,j);
+            for k=1:4
+                subMatrix(k,k)=n^2+1-subMatrix(k,k);
+                subMatrix(k,5-k)=n^2+1-subMatrix(k,5-k);
+            end
+            result((4*i-3):(4*i),(4*j-3):(4*j))=subMatrix;
+        end
     end
+end
+
+function subSquare=generateSubMatrix(square,i,j)
+    subSquare=square((4*i-3):(4*i),(4*j-3):(4*j));
 end
 
 function result=move(x,y,coordinate)
